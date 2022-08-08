@@ -40,7 +40,7 @@ function Messenger() {
     
     useEffect(()=>{
         userRedux && socket?.current.emit("addUser",userRedux?._id);
-        userRedux && socket?.current.on("getUsers",(users)=>{
+        userRedux && socket?.current.on("getUsers",(users)=>{ 
             setOnlineUsers(users)
         })
     },[userRedux])
@@ -157,6 +157,7 @@ function Messenger() {
         <div className='chatOnline'>
             <div className='chatOnlineWrapper'>
             <label className='chatmenulabel'>Online Friends</label>
+                
                 <ChatOnline onlineUsers={onlineUsers} currentUser={userRedux?._id} setCurrentChat={setCurrentChat}/>
             </div>
         </div>

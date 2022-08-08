@@ -30,6 +30,29 @@ router.get("/:userId",async(req,res)=>{
         res.status(500).json(err)
     }
 })
-
+// get conversation include userId
+router.get('/find/:firstUserId/:secondUserId',async(req,res)=>{
+    try{
+        const conversation=await ConversationModel.findOne({
+            members:{$all:[req.params.firstUserId, req.params.secondUserId]}
+        })
+        if(conversation){
+            res.status(200).json(conversation)
+        }else{
+            const newConversation= new ConversationModel({
+                members:[req.params.firstUserId,req.params.secondUserId]
+            })
+            try{
+                const savedConversation=await newConversation.save();
+                res.status(200).json(savedConversation)
+            }catch(err){
+                res.status(500).json(err)
+            }
+        }
+        
+    }catch(err){
+        res.status(500).json(err)
+    }
+})
 
 module.exports=router

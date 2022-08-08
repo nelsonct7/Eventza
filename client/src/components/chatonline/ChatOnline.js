@@ -1,20 +1,34 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import './chatonline.css'
+import {useSelector} from 'react-redux'
+import ChatOnlineSingle from '../chatonlinesingle/ChatOnlineSingle'
 
 function ChatOnline({onlineUsers,currentUser,setCurrentChat}) {
-  return (
-    <div className='chatOnline'>
-        <div className='chatOnlineFriend'>
-            <div className='chatOnlineImageContainer'>
-                <img 
-                src='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
-                className='chatOnlineImage'></img>
-                <div className='chatOnlineBadge'></div>
-            </div>
-        </div>
-        <span className='chatOnlineName'>John Carter</span>
-      
-    </div>
+  const [friends,setFriends]=useState([])
+  const [onlineFriends,setOnlineFriends]=useState([])
+  const {userRedux,companyRedux,adminRedux} =useSelector((state)=>({...state.auth}))
+
+  useEffect(()=>{
+    if(userRedux){
+      setFriends(userRedux.followings)
+    }
+    
+  },[userRedux])
+
+  useEffect(()=>{
+    setOnlineFriends(friends.filter((f)=>{
+      return onlineUsers.includes(f)
+    }))
+  },[friends,onlineUsers])
+
+  return ( 
+    <>
+      {onlineFriends.map((online,index)=>{
+        return(
+        <ChatOnlineSingle user={online} key={index} currentUser={currentUser} setCurrentChat={setCurrentChat}/>
+        )
+      })}  
+    </>
   )
 }
 

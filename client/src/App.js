@@ -31,7 +31,7 @@ useEffect(()=>{
     dispatch(vendorTockenValidator({vendorTocken}))
   }
 
-},[])
+},[adminTocken,userTocken,vendorTocken])
   return (
 <Router>
       <Routes>

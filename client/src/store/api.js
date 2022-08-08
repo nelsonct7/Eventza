@@ -48,5 +48,6 @@ export const getUserImages=(userId)=>API.get('/post/getpostimages/'+userId)
 export const likePost=(id,userId)=>API.put('/post/like/'+id,{userId})
 
 export const getConversations=(userId)=>API.get('/conversation/'+userId)
+export const getConversationsByIds=(firstUserId,secondUserId)=>API.get('/conversation/find/'+firstUserId+"/"+secondUserId)
 
 //,{headers:{"Content-Type": "multipart/form-data"}}

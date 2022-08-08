@@ -141,7 +141,7 @@ export default function Post(props) {
   }
   useEffect(()=>{
     const type=props.data.creatorType
-    console.log(type);
+    console.log();
     (type==="company")?getVendorBy():getUser()
   },[userRedux])
 
