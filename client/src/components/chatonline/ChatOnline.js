@@ -12,18 +12,21 @@ function ChatOnline({onlineUsers,currentUser,setCurrentChat}) {
     if(userRedux){
       setFriends(userRedux.followings)
     }
+    if(companyRedux){
+      setFriends(companyRedux.followers)
+    }
     
-  },[userRedux])
+  },[userRedux,companyRedux])
 
   useEffect(()=>{
-    setOnlineFriends(friends.filter((f)=>{
+    setOnlineFriends(friends?.filter((f)=>{
       return onlineUsers.includes(f)
     }))
   },[friends,onlineUsers])
 
   return ( 
     <>
-      {onlineFriends.map((online,index)=>{
+      {onlineFriends?.map((online,index)=>{
         return(
         <ChatOnlineSingle user={online} key={index} currentUser={currentUser} setCurrentChat={setCurrentChat}/>
         )

@@ -37,7 +37,7 @@ router.get('/find/:firstUserId/:secondUserId',async(req,res)=>{
             members:{$all:[req.params.firstUserId, req.params.secondUserId]}
         })
         if(conversation){
-            res.status(200).json(conversation)
+            res.status(200).json(conversation) 
         }else{
             const newConversation= new ConversationModel({
                 members:[req.params.firstUserId,req.params.secondUserId]
@@ -49,7 +49,7 @@ router.get('/find/:firstUserId/:secondUserId',async(req,res)=>{
                 res.status(500).json(err)
             }
         }
-        
+         
     }catch(err){
         res.status(500).json(err)
     }

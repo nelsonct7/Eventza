@@ -9,10 +9,13 @@ export const userTockenValid=(userTocken)=>API.post('user/tockenValidator',{user
 export const getUserById=(userId)=>API.get('/user/getUserById/'+userId)
 export const getMessagesByConversationId=(conversationId)=>API.get('/message/'+conversationId)
 export const setMessage=(message)=>API.post('/message',{...message})
-export const getAllUserList=()=>API.get('/user/getAllUsers')
+export const getAllUserList=()=>API.get('/user/getAllUsers') 
 export const updatePic=(formData1,userId)=>API.put('/user/uploadimages/'+userId,formData1)
 export const followUser=(id,userId)=>API.put('/user/follow/'+id,{userId})
 export const unFollowUser=(id,userId)=>API.put('/user/unfollow/'+id,{userId})
+export const updateUser=(userId,formData)=>API.put('/user/updateuser/'+userId,{...formData})
+export const updateUserProfilePic=(userId,formData)=>API.put('/user/updateprofilepic/'+userId,formData)
+export const updateUserCoverPic=(userId,formData)=>API.put('/user/updatecoverpic/'+userId,formData)
 
 
 
@@ -24,6 +27,10 @@ export const vendorSignUp=(formData)=>API.post('/vendor/signup',{...formData})
 export const vendorTockenValid=(vendorTocken)=>API.post('/vendor/tockenvalidator',{vendorTocken})
 export const updateVendorPic=(formData1,vendorId)=>API.put('/vendor/uploadimages/'+vendorId,formData1)
 export const getVendorById=(vendorId)=>API.get('/vendor/getVendorById/'+vendorId)
+export const getAllVendors=()=>API.get('/vendor/getallvendors')
+export const updateVendor=(vendorId,formData)=>API.put('/vendor/updatedetails/'+vendorId,{...formData})
+export const updateVendorProfilePic=(vendorId,formData)=>API.put('/vendor/updateprofilepic/'+vendorId,formData)
+export const updateVendorCoverPic=(vendorId,formData)=>API.put('/vendor/updatecoverpic/'+vendorId,formData)
 
 export const viewUserListAdmin=()=>API.get('/admin/userlist')
 export const adminDeleteUser=(userId)=>API.delete('/admin/deleteuser/'+userId)

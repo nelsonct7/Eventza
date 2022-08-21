@@ -13,8 +13,6 @@ import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import ShareIcon from '@mui/icons-material/Share';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Badge, Button, Modal, TextField } from '@mui/material';
 import {useSelector,useDispatch} from 'react-redux'
 import { Box, height } from '@mui/system';
@@ -22,6 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import { updatePost,deletePost, likePosts } from '../../store/features/postSlice';
 import * as api from '../../store/api'
 import { userTockenValidator } from '../../store/features/authSlice';
+import RightSideAvatar from './RightSideAvatar';
 
 
 const style = {
@@ -123,9 +122,12 @@ const handleDelete=()=>{
 export default function Post(props) {
   const [expanded, setExpanded] = React.useState(true);
   const {loading,userRedux,companyRedux,adminRedux,error} =useSelector((state)=>({...state.auth}))
+  const {posts} =useSelector((state)=>({...state.post}))
   const dispatch=useDispatch()
   const navigate=useNavigate()
   const [userData,setUserData]=useState(null)
+  const [likers,setLikers]=useState([])
+
 
   const getUser=async()=>{
     const userId=props.data.creatorId
@@ -142,8 +144,17 @@ export default function Post(props) {
   useEffect(()=>{
     const type=props.data.creatorType
     console.log();
-    (type==="company")?getVendorBy():getUser()
-  },[userRedux])
+    (type==="company")?setTimeout(getVendorBy(),2000):setTimeout(getUser(),2000)
+  },[userRedux,props.data.creatorId])
+
+  useEffect(()=>{
+    setLikers([])
+    props.data?.likes.map(async(userId)=>{
+        const resp =await api.getUserById(userId)
+        setLikers(current=>[...current,resp.data])
+      }
+    )
+  },[posts])
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -176,7 +187,11 @@ export default function Post(props) {
   const LikeDisLike=async()=>{
     const id=props.data._id
     const userId=userRedux._id
+    setLikers([])
     dispatch(likePosts({id,userId})) 
+  }
+  const goToProfile=(id)=>{
+    navigate("/viewuserprofile/"+id)
   }
 
 
@@ -184,7 +199,8 @@ export default function Post(props) {
     <Card sx={{mt:3,bgcolor:'#a663cc'}}>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" 
+          <Avatar sx={{ bgcolor: red[500],cursor:'pointer' }} aria-label="recipe" 
+          onClick={()=>{goToProfile(userData?._id)}}
           src={userData?.profilepicture?"http://localhost:5000/profile-images/"+userData.profilepicture:"https://i.pinimg.com/originals/d9/56/9b/d9569bbed4393e2ceb1af7ba64fdf86a.jpg"}>
           </Avatar>
         }
@@ -210,6 +226,7 @@ export default function Post(props) {
           {props.data.post}
         </Typography>
       </CardContent>
+      
       {userRedux?
       <CardActions disableSpacing>
         {props.data.likes.includes(userRedux?._id)
@@ -225,15 +242,22 @@ export default function Post(props) {
       :
       <CardActions disableSpacing>
         {props.data.likes.includes(userRedux?._id)
-        ?<IconButton aria-label="add to favorites">
+        ?<>
+        <IconButton aria-label="add to favorites">
         <FavoriteIcon />
         <Badge>{props.data.likes.length}</Badge>
         </IconButton>
-        :<IconButton aria-label="add to favorites">
+        </> 
+        :<>
+        <IconButton aria-label="add to favorites">
         <FavoriteBorderIcon/>
         <Badge>{props.data.likes.length}</Badge>
-        </IconButton>}  
-      </CardActions>}
+        </IconButton>
+        </>
+        }  
+      </CardActions>
+      }
+      <RightSideAvatar follower={likers}/>
     </Card>
   );
 }

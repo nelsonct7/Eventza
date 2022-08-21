@@ -12,7 +12,7 @@ const userSchema=mongoose.Schema(
             required:true,
             unique:true
         },
-        userPassword:{
+        userPassword:{ 
             type:String,
             required:true
         },
@@ -56,11 +56,11 @@ const userSchema=mongoose.Schema(
           },
         from: {
             type: String,
-            max: 50,
+            max: 50, 
           },
         relationship: {
-            type: Number,
-            enum: [1, 2, 3],
+            type: String,
+            max:10
           },
         messages:[{MessageId:String}]
     },

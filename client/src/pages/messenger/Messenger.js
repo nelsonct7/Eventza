@@ -39,7 +39,7 @@ function Messenger() {
     },[arrivalMessage,currentChat])
     
     useEffect(()=>{
-        userRedux && socket?.current.emit("addUser",userRedux?._id);
+        userRedux && socket?.current.emit("addUser",userRedux?userRedux?._id:companyRedux?._id);
         userRedux && socket?.current.on("getUsers",(users)=>{ 
             setOnlineUsers(users)
         })
@@ -48,14 +48,15 @@ function Messenger() {
     useEffect(()=>{
         const userConversations=async()=>{
             try{
-                const res=await getConversations(userRedux?._id)
+                const id=userRedux?userRedux?._id:companyRedux?._id
+                const res=await getConversations(id)
                 setConversations(res.data)
             }catch(err){
                 console.log(err);
             }
         };
-        userRedux && userConversations()
-    },[userRedux])
+        (userRedux||companyRedux) && userConversations()
+    },[userRedux,companyRedux])
 
     useEffect(()=>{
         const getMesseges=async()=>{
@@ -66,29 +67,49 @@ function Messenger() {
                 console.log(err);
             }
         };
-        userRedux && getMesseges();
+        (userRedux||companyRedux) && getMesseges();
     },[currentChat])
 
 
     const handleSubmit=async(e)=>{
       e.preventDefault()
-      const message={
+      let message={}
+      userRedux?
+      message={
         conversationId:currentChat._id,
         senderId:userRedux._id,
         senderName:userRedux.userName,
         senderType:userRedux.userRoll,
         text:newMessage
       }
+      :
+      message={
+        conversationId:currentChat._id,
+        senderId:companyRedux._id,
+        senderName:companyRedux.companyName,
+        senderType:"company",
+        text:newMessage
+      }
+      const reciever=currentChat.members.find(member=>member!==userRedux._id||companyRedux._id)
 
-      const reciever=currentChat.members.find(member=>member!==userRedux._id)
-      socket.current.emit("sendMessage",{
+      let socketMsg={}
+      userRedux?
+      socketMsg={
         senderId:userRedux._id,
         recieverId:reciever,
         text:newMessage,
         senderName:userRedux.userName,
         senderType:userRedux.userRoll,
-        
-      })
+      }
+      :
+      socketMsg={
+        senderId:userRedux._id,
+        recieverId:reciever,
+        text:newMessage,
+        senderName:userRedux.userName,
+        senderType:userRedux.userRoll,
+      }
+      socket.current.emit("sendMessage",{...socketMsg})
 
       try{
         const res=await setMessage(message)
@@ -115,7 +136,7 @@ function Messenger() {
                     conversation.map((c,index)=>{
                         return(
                         <div onClick={()=>setCurrentChat(c)} key={index}>
-                        <Conversations conversation={c} currentUser={userRedux}/>
+                        <Conversations conversation={c} currentUser={userRedux?userRedux:companyRedux}/>
                         </div>)
                     })
                 }
@@ -158,7 +179,7 @@ function Messenger() {
             <div className='chatOnlineWrapper'>
             <label className='chatmenulabel'>Online Friends</label>
                 
-                <ChatOnline onlineUsers={onlineUsers} currentUser={userRedux?._id} setCurrentChat={setCurrentChat}/>
+                <ChatOnline onlineUsers={onlineUsers} currentUser={userRedux?userRedux?._id:companyRedux?._id} setCurrentChat={setCurrentChat}/>
             </div>
         </div>
     </div>

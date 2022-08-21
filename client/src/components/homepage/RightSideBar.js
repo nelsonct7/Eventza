@@ -5,6 +5,7 @@ import ImageListComponent from './ImageListComponent'
 import {useSelector,useDispatch} from 'react-redux'
 import { getUserById } from '../../store/api'
 import { display } from '@mui/system'
+import RightSideAvatar from './RightSideAvatar'
 
 
 const RightSideBar = () => {
@@ -15,11 +16,13 @@ const RightSideBar = () => {
   useEffect(()=>{
     setFollower([])
     userRedux?.followers.map(async(userId)=>{
-      const resp=await getUserById(userId)
-      setFollower(current=>[...current,resp.data])
-    })
-    
-  },[userRedux])
+      const resp=await getUserById(userId).then((data)=>{
+        setFollower(current=>[...current,data.data])
+      }).catch((err)=>{
+        console.log(err);
+      })
+      
+    })},[userRedux])
 
   useEffect(()=>{
     setFollowing([])
@@ -36,26 +39,11 @@ const RightSideBar = () => {
         <Box sx={{position:'fixed',overflowY:'scroll',maxHeight:'80vh'}} p={3}>
         <Box>
         <Typography variant={'h6'}>Followers</Typography>
-        <AvatarGroup max={3} sx={{alignItems:'center',m:4}}>
-          {follower.map((fellow,index)=>{
-            return(
-            <Avatar key={index} alt={fellow.userName} src={fellow?.profilepicture!==""?"http://localhost:5000/profile-images/"+fellow.profilepicture
-            :"https://www.whatsappimages.in/wp-content/uploads/2021/12/girl-New-Superb-Whatsapp-Dp-Profile-Images-photo.jpg"} />
-            )})
-          }
-        </AvatarGroup>
+        <RightSideAvatar follower={follower}/>
         </Box>
         <Box sx={{marginTop:5}}>
         <Typography variant={'h6'}>Following</Typography>
-        <AvatarGroup max={7}>
-        {following.map((fellow,index)=>{
-            return(
-            <Avatar key={index} alt={fellow.userName} src={fellow?.profilepicture!==""?"http://localhost:5000/profile-images/"+fellow.profilepicture
-            :"https://www.whatsappimages.in/wp-content/uploads/2021/12/girl-New-Superb-Whatsapp-Dp-Profile-Images-photo.jpg"} />
-            )})
-          }
-        
-        </AvatarGroup>
+        <RightSideAvatar follower={following}/> 
         </Box>
         <Box sx={{marginTop:5}}>
         <Typography variant={'h6'} m={2}>Images</Typography>

@@ -1,12 +1,19 @@
 import React,{useState,useEffect} from 'react'
-import { getConversationsByIds, getUserById } from '../../store/api'
+import { getConversationsByIds, getUserById, getVendorById } from '../../store/api'
 import './chatonlinesingle.css'
 function ChatOnlineSingle({user,currentUser,setCurrentChat}) {
     const [onliner,setOnliner]=useState(null)
     useEffect(()=>{
         const getUserByIdChat=async()=>{
             const data=await getUserById(user)
-            setOnliner(data.data)
+            if(data){
+                setOnliner(data.data)
+            }
+            else{
+                const data1=await getVendorById(user)
+                setOnliner(data1.data)
+            }
+            
         }
         getUserByIdChat();   
     },[])
@@ -26,7 +33,7 @@ const handleClick=()=>{
             className='chatOnlineImage'></img>
             <div className='chatOnlineBadge'></div>
         </div>
-        <span className='chatOnlineName'>{onliner?.userName}</span>
+        <span className='chatOnlineName'>{onliner?.userName?onliner?.userName:onliner?.companyName}</span>
         </div>
     </div>
         )

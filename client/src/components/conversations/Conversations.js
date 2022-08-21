@@ -4,8 +4,6 @@ import {getUserById} from '../../store/api'
 
 function Conversations({conversation,currentUser}) {
   const [user,setUser]=useState("")
-
-
   useEffect(()=>{
      const friendId=conversation.members.find((m)=>m!==currentUser._id)
      const getUser=async()=>{

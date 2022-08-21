@@ -11,7 +11,7 @@ senderName:{
     type:String,
 },
 senderType:{
-    type:String,
+    type:String, 
 },
 text:{
     type:String

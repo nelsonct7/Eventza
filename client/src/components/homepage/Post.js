@@ -5,8 +5,10 @@ import { Button, Card, CardActions, CardContent, TextField, Typography } from '@
 import {useSelector,useDispatch} from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import { createPost } from '../../store/features/postSlice';
-import * as api from '../../store/api'
-import axios from 'axios'
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+
+import LiveTvIcon from '@mui/icons-material/LiveTv';
+import AddEvents from '../vendors/AddEvents';
 
 function AddPost() {
     const {loading,userRedux,companyRedux,adminRedux,error} =useSelector((state)=>({...state.auth}))
@@ -61,7 +63,10 @@ function AddPost() {
         
       </CardContent>
       <CardActions sx={{display:'flex',justifyContent:'end',gap:2}}>
+        {companyRedux?<><AddEvents/>
+        <Button variant="contained" component="label"><LiveTvIcon/>Go live</Button></>:""}
           <Button variant="contained" component="label">
+            <AddPhotoAlternateIcon/>
           Upload Image
           <input
             type="file"

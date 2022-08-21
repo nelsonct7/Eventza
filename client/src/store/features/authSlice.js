@@ -134,6 +134,15 @@ export const getAllUsers=createAsyncThunk('auth/getAllUsers',async()=>{
     }
 })
 
+export const updateUser=createAsyncThunk('auth/updateUser',async({formData,userId})=>{
+    try{
+        const responce=await api.updateUser(userId,formData)
+        return responce
+    }catch(err){
+        return
+    }
+})
+
 // <-------------------------------------------------------------------------------------------------------
 const authSlice=createSlice({
     name:'auth',
@@ -316,10 +325,21 @@ const authSlice=createSlice({
         },
         [getAllUsers.fulfilled]:(state,action)=>{
             state.loading=false
-            console.log(JSON.stringify(action.payload.data));
             
         },
         [getAllUsers.rejected]:(state,action)=>{
+            state.loading=false
+            state.error=''
+        },
+        [updateUser.pending]:(state,action)=>{
+            state.loading=true
+            state.error=""
+        },
+        [updateUser.fulfilled]:(state,action)=>{
+            state.loading=false
+            //state.userRedux=action.payload.data            
+        },
+        [updateUser.rejected]:(state,action)=>{ 
             state.loading=false
             state.error=''
         },

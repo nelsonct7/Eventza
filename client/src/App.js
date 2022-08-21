@@ -14,6 +14,7 @@ import { adminTockenValidator,userTockenValidator,vendorTockenValidator } from "
 import UserProfile from "./pages/user/userprofile/UserProfile";
 import Messenger from "./pages/messenger/Messenger";
 import VendorProfile from "./pages/vendor/vendorprofile/VendorProfile";
+import ViewProfile from "./pages/user/viewprofile/ViewProfile";
 
 function App() {
 const dispatch=useDispatch()
@@ -42,6 +43,7 @@ useEffect(()=>{
         <Route exact path="/vendorhome" element={<VendorHome/>} />
         <Route exact path="/userlogin" element={<UserLoginSignUp/>} />
         <Route exact path="/userprofile" element={<UserProfile/>} />
+        <Route exact path="/viewuserprofile/:id" element={<ViewProfile/>} />
         <Route exact path="/messenger" element={<Messenger/>} />
         <Route exact path="/vendorlogin" element={<VendorLogInSignUpPage/>} />
         <Route exact path="/vendorprofile" element={<VendorProfile/>} />

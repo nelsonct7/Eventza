@@ -112,6 +112,7 @@ const handleDelete=()=>{
 }
 
 function VendorCard(props) {
+  const navigate=useNavigate()
   const {loading,userRedux,companyRedux,adminRedux,error} =useSelector((state)=>({...state.auth}))
   const [user,setUser]=useState(null)
   const getUser=async()=>{
@@ -148,7 +149,7 @@ function VendorCard(props) {
       }
       
       <CardContent>
-      <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" src={user?"http://localhost:5000/profile-images/"+user.profilepicture:""}>
+      <Avatar sx={{ bgcolor: red[500],cursor:'pointer' }} aria-label="recipe" src={user?"http://localhost:5000/profile-images/"+user.profilepicture:""} onClick={()=>{navigate("/viewuserprofile/"+user?._id)}}>
             R
           </Avatar>
         <Typography gutterBottom variant="h5" component="div">

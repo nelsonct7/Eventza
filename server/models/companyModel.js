@@ -36,10 +36,22 @@ const companySchema=mongoose.Schema(
             require:false,
             default:""
         },
-        followers:[{userId:String}],
-        following:[{userId:String}],
-        posts:[{postId:String}],
-        messages:[{MessageId:String}]
+        desc:{
+            type:String,
+            required:false,
+        }, 
+        city: {
+            type: String,
+            max: 50,
+          },
+        from: {
+            type: String,
+            max: 50, 
+          },
+          followers:{
+            type:Array,
+            default:[]
+        },
     },
     {
         timestamps:true

@@ -63,11 +63,10 @@ const useStyles = makeStyles((theme) => ({
    function ImgList1(props){
     const {posts}=useSelector((state)=>({...state.post}))
     const classes = useStyles();
-    const userId=props.user._id
+    const userId=props.user?._id
     const [photos,setPhotos]=useState([])
     const getData=async()=>{
       const photos=await api.getUserImages(userId)
-      console.log(photos);
       setPhotos(photos.data.feeds)
       
     }
@@ -117,11 +116,19 @@ const useStyles = makeStyles((theme) => ({
     );
    }
 
-function ImageListComponent() {
+function ImageListComponent({profileview,userId}) {
   const {loading,userRedux,companyRedux,adminRedux,error} =useSelector((state)=>({...state.auth}))
+  const [userData,setUserData]=useState(null)
+  useEffect(()=>{
+    const getUser=async()=>{
+      await api.getUserById(userId).then((data)=>{
+        setUserData(data.data)
+      })
+    }
+  })
   return (
     <>
-    {userRedux?<ImgList1 user={userRedux}/>:""}
+    {userRedux?<ImgList1 user={profileview?userData:userRedux}/>:""}
     </>
   )
 }

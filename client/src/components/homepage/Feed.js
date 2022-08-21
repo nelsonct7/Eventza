@@ -5,7 +5,7 @@ import AddPost from './Post'
 import {useSelector,useDispatch} from 'react-redux'
 import * as api from '../../store/api'
 
-const Feed = () => {
+const Feed = ({profileview,userId}) => {
   const {loading,userRedux,companyRedux,adminRedux,error} =useSelector((state)=>({...state.auth}))
   const {posts}=useSelector((state)=>({...state.post}))
   const dispatch=useDispatch()
@@ -14,12 +14,24 @@ const Feed = () => {
     const data=await api.getPost()
     setFeeds(data.data.feeds)
   }
+  const getDataById=async (userId)=>{
+    const data=await api.getPostbyId(userId).then((data)=>{
+      setFeeds(data.data.feeds)
+    }).catch((err)=>{
+      console.log(err);
+    })
+  }
   useEffect(()=>{
-    getData()
-  },[posts])
+    if(profileview&&userId){
+      getDataById(userId)
+    }else{
+      getData()
+    }
+    
+  },[posts,userId])
   return (
       <Box flex={4} p={2} marginLeft={'20px'}>
-        {userRedux && <AddPost/>}
+        {userRedux && !profileview && <AddPost/>}
         {feeds.map((fee,index)=> <Post key={index} data={fee}/>)}
         
       </Box>   

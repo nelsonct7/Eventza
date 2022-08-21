@@ -37,7 +37,7 @@ function UserProfile() {
             </div>
             <div className='profileInfo'>
                 <h4 className='profileInfoName'>{userRedux?userRedux.userName:companyRedux?.companyName}</h4>
-                <span className='profileInfoDesc'>Description</span>
+                <span className='profileInfoDesc'>{userRedux?.desc?userRedux.desc:"Undefined"}</span>
             </div>
             </div>
             <div className='profileRightBottom'>

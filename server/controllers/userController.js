@@ -1,7 +1,9 @@
 const asynchandler = require('express-async-handler');
 const UserModel = require('../models/userModel');
+const CompanyModel=require('../models/companyModel');
 const generateTocken = require('../utils/generateTocken');
-const jwt=require('jsonwebtoken')
+const jwt=require('jsonwebtoken');
+const { findById } = require('../models/userModel');
 
 const registerUser = asynchandler(async (req, res) => {
     const {
@@ -69,7 +71,11 @@ const authUser = asynchandler(async (req, res) => {
             profilepicture:user.profilepicture,
             coverpicture:user.coverpicture,
             followers:user.followers,
-            followings:user.followings
+            followings:user.followings,
+            desc:user.desc,
+            city:user.city,
+            from:user.from,
+            relationship:user.relationship
         })
         } else {
         res.status(400)
@@ -80,14 +86,13 @@ const authUser = asynchandler(async (req, res) => {
 
 const tockenValidator=async(req,res)=>{
     const jwtTocken=req.body.userTocken
-  
     const verified=jwt.verify(jwtTocken,process.env.JWT_KEY)
     const userId=verified.id
     if(verified){
         const user = await UserModel.findOne({
             _id:userId
         });
-        res.status(201).json({
+        res.status(201).json({ 
                 userName: user.userName,
                 userEmail: user.userEmail,
                 _id: user._id,
@@ -96,7 +101,12 @@ const tockenValidator=async(req,res)=>{
                 profilepicture:user.profilepicture,
                 coverpicture:user.coverpicture,
                 followers:user.followers,
-                followings:user.followings
+                followings:user.followings,
+                desc:user.desc,
+                city:user.city,
+                from:user.from,
+                relationship:user.relationship
+
         })
     }else{
         res.status(400).json({
@@ -110,7 +120,13 @@ const followUser=async(req,res)=>{
     if(req.body.userId!==req.params.id){
         try{
             const user=await UserModel.findById(req.params.id);
-            const currentUser=await UserModel.findById(req.body.userId)
+            let currentUser=""
+            const isUser=await UserModel.findById(req.body.userId)
+                if(isUser){
+                    currentUser=isUser
+                }else{
+                    currentUser=CompanyModel.findById(req.body.userId)
+                }
             if(!user.followers.includes(req.body.userId)){
                 await user.updateOne({$push:{followers:req.body.userId}})
                 await currentUser.updateOne({$push:{followings:req.params.id}})
@@ -121,16 +137,23 @@ const followUser=async(req,res)=>{
         }catch(err){
             res.status(500).json({err:"Server error"})
         }
-    }else{
+    }else{ 
         res.status(403).json({err:"You can not follow your self"})
     }
 }
 
 const unfollowUser=async(req,res)=>{
+    console.log(req.body);
     if(req.body.userId!==req.params.id){
         try{
             const user=await UserModel.findById(req.params.id);
-            const currentUser=await UserModel.findById(req.body.userId)
+            let currentUser=""
+            const isUser=await UserModel.findById(req.body.userId)
+            if(isUser){
+                currentUser=isUser
+            }else{
+                currentUser=CompanyModel.findById(req.body.userId)
+            }
             if(user.followers.includes(req.body.userId)){
                 await user.updateOne({$pull:{followers:req.body.userId}})
                 await currentUser.updateOne({$pull:{followings:req.params.id}})
@@ -161,7 +184,11 @@ const getUser=async(req,res)=>{
                 profilepicture:user.profilepicture,
                 coverpicture:user.coverpicture,
                 followers:user.followers,
-                followings:user.followings
+                followings:user.followings,
+                desc:user.desc,
+                city:user.city,
+                from:user.from,
+                relationship:user.relationship
         })
         }else{
             res.status(404).json({err:"Resource not found"})
@@ -174,11 +201,15 @@ const getUser=async(req,res)=>{
 
 const getAllUser=async(req,res)=>{
     try{
-
+        const usersList=await UserModel.find()
+            if(usersList){
+                res.status(200).json(usersList)
+                }else{
+                    res.status(400).json({message:'User List error'})  
+                }
     }catch(err){
         res.status(500).json({err:"Server Error"})
     }
-
 }
 
 const uploadImages=async(req,res)=>{
@@ -196,6 +227,59 @@ const uploadImages=async(req,res)=>{
     }
 } 
 
+const updateUser=async(req,res)=>{
+    try{
+        await UserModel.findByIdAndUpdate(req.params.userId,{
+            userName:req.body.userName,
+            desc:req.body.desc,
+            city:req.body.city,
+            from:req.body.from,
+            relationship:req.body.relationship
+        },{upsert: true}).then((data)=>{   
+            res.status(200).json({msg:"Successfull"}) 
+        }).catch((err)=>{
+            res.status(400).json({msg:"User Not found"})
+        })
+    }catch(err){
+        res.status(500).json({err:"Server Error"})
+    }
+}
+
+const updateProfilePic=async(req,res)=>{
+    console.log('ggggggg');
+    console.log(req.file);
+    const profilePic=req.file?.filename
+    try{
+        await UserModel.findByIdAndUpdate(req.params.userId,{
+            profilepicture:profilePic
+        }).then((data)=>{
+            res.status(200).json({Success:"Image Uploaded Success fully"})
+        }).catch((err)=>{
+            res.status(404).json({msg:"Resource not found"})
+        })
+        
+    }catch(err){
+        res.status(500).json({err:"Server Error"})
+    }
+} 
+
+const updateCoverPic=async(req,res)=>{
+    console.log("ffffffff");
+    console.log(req.file);
+    const coverPic=req.file?.filename 
+    try{
+        await UserModel.findByIdAndUpdate(req.params.userId,{
+            coverpicture:coverPic
+        }).then((data)=>{
+            res.status(200).json({Success:"Image Uploaded Success fully"})
+        }).catch((err)=>{
+            res.status(404).json({msg:"Resource not found"})
+        })
+    }catch(err){
+        res.status(500).json({err:"Server Error"})
+    }
+}
+
 module.exports = {
     registerUser,
     authUser,
@@ -204,5 +288,8 @@ module.exports = {
     unfollowUser,
     getUser,
     getAllUser,
-    uploadImages 
+    uploadImages,
+    updateUser,
+    updateProfilePic,
+    updateCoverPic
 };
