@@ -4,11 +4,12 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
-import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select, TextareaAutosize, TextField } from '@mui/material';
 import {DateTimePicker} from '@mui/x-date-pickers-pro';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import {useSelector,useDispatch} from 'react-redux'
+import { addEventVendor } from '../../store/features/eventSlice';
 
  
 const style = {
@@ -22,8 +23,10 @@ const style = {
   boxShadow: 24,
   p: 4, 
 };
+
  
 export default function AddEvents() {
+  const dispatch=useDispatch()
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () =>{
@@ -33,24 +36,43 @@ export default function AddEvents() {
     setEventName("")
     setEventType("")
   } 
+  const [description,setDescription]=React.useState("")
   const [eventName,setEventName]=React.useState("")
   const [eventType,setEventType]=React.useState("")
   const [eventDate,setEventDate]=React.useState("")
   const [eventLocation,setEventLocation]=React.useState(null)
   const [companyName,setCompanyName]=React.useState("")
+  const [companyId,setCompanyId]=React.useState("")
+  const [posterImage,setPostImage]=React.useState(null)
   const {loading,userRedux,companyRedux,adminRedux,error} =useSelector((state)=>({...state.auth}))
 
   const handleDate = (newValue) => {
     setEventDate(newValue);
-  };
-
+  }; 
+  const handleImage=(e)=>{
+    setPostImage(e.target.files[0])
+  }
   const handleSubmit=()=>{
-    alert(eventName+" "+eventType+" "+eventDate+" "+companyName)
-    handleClose() 
+    if(eventName==="" || eventType==="" || eventDate==="" || posterImage===null){
+      alert("Add all filds")
+    }else{
+      const formData=new FormData()
+      formData.append('eventName',  eventName)
+      formData.append('eventType',  eventType)
+      formData.append('eventDate',  eventDate)
+      formData.append('companyName',companyName)
+      formData.append('companyId',  companyId)
+      formData.append('description',  description)
+      formData.append('posterImage',posterImage)
+      dispatch(addEventVendor({formData}))
+      alert("Event added")
+      handleClose()
+    }
   }
   useEffect(()=>{
     setCompanyName(companyRedux?.companyName)
-  })
+    setCompanyId(companyRedux?._id)
+  },[])
   return (
     <div>
     <Button variant="contained" component="label" onClick={handleOpen}><AddLocationAltIcon />Add Events</Button>
@@ -83,12 +105,21 @@ export default function AddEvents() {
           fullWidth
           sx={{mb:2}}
           />
+
+          <TextareaAutosize
+            aria-label="Description"
+            minRows={3}
+            placeholder="Description"
+            onChange={(e)=>{setDescription(e.target.value)}}
+            style={{ width: '100%' }}
+            sx={{mb:2}} 
+          />
         <LocalizationProvider dateAdapter={AdapterMoment} >
         <DateTimePicker
           label="Event Date"
           value={eventDate}
           onChange={handleDate}
-          renderInput={(params) => <TextField {...params} fullWidth sx={{mb:2}} variant="outlined" />}
+          renderInput={(params) => <TextField {...params} fullWidth sx={{mb:2,mt:2}} variant="outlined" />}
         />
         </LocalizationProvider>
         <FormControl fullWidth>
@@ -96,7 +127,7 @@ export default function AddEvents() {
         <Select
           labelId="demo-simple-select-helper-label"
           id="demo-simple-select-helper"
-          value={eventType}
+          value={eventType} 
           label="Event Type"
           onChange={(e)=>{setEventType(e.target.value)}}
           fullWidth
@@ -107,6 +138,15 @@ export default function AddEvents() {
           <MenuItem value={"Corporate"}>Corporate Events</MenuItem>
         </Select>
         </FormControl>
+        <Button variant="contained" component="label" fullWidth>
+                  Upload Poster
+                  <input
+                    type="file"
+                    filename='postImage'
+                    onChange={handleImage}
+                    hidden
+                    
+                  /></Button>
         <Box sx={{display:'flex',margin:2}} gap={2}>
           <Button variant="contained" component="label" sx={{maxHeight:40}} onClick={handleSubmit} color="success">Update</Button>
           <Button variant="contained" component="label" sx={{maxHeight:40}} onClick={handleClose} color="error">Cancel</Button>

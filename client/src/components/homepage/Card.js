@@ -196,7 +196,7 @@ export default function Post(props) {
 
 
   return (
-    <Card sx={{mt:3,bgcolor:'#a663cc'}}>
+    <Card sx={{mt:3,boxShadow:4}}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500],cursor:'pointer' }} aria-label="recipe" 

@@ -1,5 +1,6 @@
 const asynchandler = require('express-async-handler');
 const CompanyModel = require('../models/companyModel');
+const EventModel=require('../models/eventModel')
 const generateTocken = require('../utils/generateTocken');
 const jwt=require('jsonwebtoken')
 
@@ -171,8 +172,7 @@ const updateDetails=async(req,res)=>{
 }
  
 const updateProfilePic=async(req,res)=>{
-    console.log('ggggggg');
-    console.log(req.file);
+
     const profilePic=req.file?.filename
     try{
         await CompanyModel.findByIdAndUpdate(req.params.vendorId,{
@@ -189,8 +189,7 @@ const updateProfilePic=async(req,res)=>{
 } 
 
 const updateCoverPic=async(req,res)=>{
-    console.log("ffffffff");
-    console.log(req.file);
+   
     const coverPic=req.file?.filename 
     try{
         await CompanyModel.findByIdAndUpdate(req.params.vendorId,{
@@ -205,6 +204,81 @@ const updateCoverPic=async(req,res)=>{
     }
 }
 
+//<_________________________________________________Events___________________________________
+
+const addEvent=async(req,res)=>{
+    try{
+        const {eventName,
+            eventType,             
+            eventDate,            
+            companyName,
+            companyId,
+            description            
+            }=req.body
+        const posterImage=req.file?.filename
+        await EventModel.create({
+            eventName,
+            eventType,            
+            eventDate,            
+            companyName,
+            companyId,
+            posterImage,
+            description
+        }).then((data)=>{
+            res.status(200).json(data)
+        }).catch((err)=>{
+            res.status(400).send("Event not created")
+        })
+    }catch(err){
+        res.status(500).send('Server Error')
+    }
+}
+const deleteEvent=(req,res)=>{
+
+}
+const updateEvent=(req,res)=>{
+
+}
+const getEventById=async(req,res)=>{
+    console.log(req.params.eventId);
+    const eventId=req.params.eventId
+    try{
+        await EventModel.findById(eventId).then((data)=>{
+            res.status(200).json(data)
+        }).catch((err)=>{
+            res.status(404).send("Events not found")  
+        })
+    }catch(err){ 
+        res.status(500).send("Server Error")  
+    }
+
+}
+const getEventByVendorId=async(req,res)=>{
+    const vendorId=req.params.vendorId 
+    try{
+        await EventModel.find({companyId:vendorId}).sort({_id:-1}).limit(5).then((data)=>{
+            res.status(200).json(data)
+        }).catch((err)=>{
+            res.status(404).send("Events not found")  
+        })
+    }catch(err){ 
+        res.status(500).send("Server Error")  
+    }
+}
+
+const getAllEvents=async(req,res)=>{
+    try{
+        await EventModel.find().sort({_id:-1}).then((data)=>{
+            res.status(200).json(data)
+        }).catch((err)=>{
+            res.status(404).send("Events not found")  
+        })
+    }catch(err){
+        res.status(500).send("Server Error")
+    }
+}
+
+
 module.exports = {
     registerCompany,
     authCompany,
@@ -214,5 +288,11 @@ module.exports = {
     getAllVendors,
     updateDetails,
     updateProfilePic,
-    updateCoverPic
+    updateCoverPic,
+    addEvent,
+    deleteEvent,
+    updateEvent,
+    getEventById,
+    getEventByVendorId,
+    getAllEvents
 };

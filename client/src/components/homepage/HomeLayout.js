@@ -9,7 +9,7 @@ const HomeLayout = () => {
   const {loading,userRedux,companyRedux,error} =useSelector((state)=>({...state.auth}))
   return (
     <Box>
-        <Stack direction='row' spacing={3} justifyContent='space-between'>
+        <Stack direction='row' spacing={1} justifyContent='space-between'>
             <LeftSideBar/>
             <Feed/>
             {userRedux&&<RightSideBar/>}

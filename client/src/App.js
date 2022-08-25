@@ -15,6 +15,8 @@ import UserProfile from "./pages/user/userprofile/UserProfile";
 import Messenger from "./pages/messenger/Messenger";
 import VendorProfile from "./pages/vendor/vendorprofile/VendorProfile";
 import ViewProfile from "./pages/user/viewprofile/ViewProfile";
+import ViewEvents from "./pages/ViewEvents";
+import ViewEventPage from "./pages/ViewEventPage";
 
 function App() {
 const dispatch=useDispatch()
@@ -47,6 +49,8 @@ useEffect(()=>{
         <Route exact path="/messenger" element={<Messenger/>} />
         <Route exact path="/vendorlogin" element={<VendorLogInSignUpPage/>} />
         <Route exact path="/vendorprofile" element={<VendorProfile/>} />
+        <Route exact path="/listevent" element={<ViewEvents/>} />
+        <Route exact path="/viewevent/:id" element={<ViewEventPage/>} />
       </Routes>
     </Router> 
   );

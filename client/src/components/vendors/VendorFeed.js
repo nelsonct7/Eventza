@@ -371,7 +371,6 @@ const uploadCoverImage=async()=>{
                     borderRadius: "50%"
                   }}
                 >
-                  
                   <ImageSrc
                     style={{
                       backgroundImage: `url(

@@ -1,6 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const {authCompany,registerCompany,tockenValidator,uploadImages,getVendor,getAllVendors,updateDetails,updateProfilePic,updateCoverPic}=require('../controllers/vendorcontroller')
+const {authCompany,
+  registerCompany,
+  tockenValidator,
+  uploadImages, 
+  getVendor,
+  getAllVendors,
+  updateDetails,
+  updateProfilePic,
+  updateCoverPic,
+  addEvent,
+  deleteEvent,
+  updateEvent,
+  getEventById,
+  getEventByVendorId,
+  getAllEvents
+}=require('../controllers/vendorcontroller')
 
 
 const multer = require("multer");
@@ -49,6 +64,18 @@ const covImageStorage = multer.diskStorage({
 
 const coverPicStore = multer({ storage : covImageStorage })
 
+const eventImageStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./public/event-images");
+  },
+  filename: function (req, file, callback) {
+    callback(null, "event_image-" + Date.now() + ".jpeg");
+    
+  },
+});
+
+const eventPosterStore = multer({ storage : eventImageStorage })
+
 router.route('/login').post(authCompany)
 router.route('/signup').post(registerCompany)
 router.route('/tockenvalidator').post(tockenValidator)
@@ -74,7 +101,13 @@ router.route('/updateprofilepic/:vendorId').put(
     profilePicStore.single('profilepicture'),updateProfilePic)
 router.route('/updatecoverpic/:vendorId').put(
     coverPicStore.single('coverpicture'),updateCoverPic)
- 
+router.route('/addevent').post(eventPosterStore.single('posterImage'),addEvent)
+router.route('/deleteevent/:eventId').delete(deleteEvent)
+router.route('/updateevent/:eventId').put(updateEvent)
+router.route('/geteventbyid/:eventId').get(getEventById)
+router.route('/geteventbyvendorid/:vendorId').get(getEventByVendorId)
+router.route('/getallevents').get(getAllEvents)
+
 
 
 module.exports = router; 

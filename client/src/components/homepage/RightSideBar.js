@@ -34,22 +34,21 @@ const RightSideBar = () => {
   },[userRedux])
 
   return (
-      <Box flex={1} p={3} 
+      <Box flex={1} pe={2}
       sx={{display:{xs:'none',sm:'block'}}}>
         <Box sx={{position:'fixed',overflowY:'scroll',maxHeight:'80vh'}} p={3}>
-        <Box>
+        <Box sx={{boxShadow:4,borderRadius:2,m:2}}>
         <Typography variant={'h6'}>Followers</Typography>
         <RightSideAvatar follower={follower}/>
         </Box>
-        <Box sx={{marginTop:5}}>
+        <Box sx={{boxShadow:4,borderRadius:2,m:2}}>
         <Typography variant={'h6'}>Following</Typography>
         <RightSideAvatar follower={following}/> 
         </Box>
-        <Box sx={{marginTop:5}}>
+        <Box sx={{boxShadow:4,borderRadius:2,m:2}}>
         <Typography variant={'h6'} m={2}>Images</Typography>
           <ImageListComponent/>
         </Box>
-        <Chatox/>
         </Box>
         
       

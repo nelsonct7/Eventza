@@ -1,7 +1,9 @@
 import { Box, ImageList, ImageListItem, Typography } from '@mui/material'
 import React,{useState,useEffect} from 'react'
 import {useSelector,useDispatch} from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import * as api from '../../store/api'
+import { getEventByVendorId } from '../../store/features/eventSlice';
 import ChatOnline from '../chatonline/ChatOnline';
 import Listcomponent from '../homepage/Listcomponent';
 
@@ -79,6 +81,10 @@ function VendorRight1(){
 )
 } 
 function VendorRight2(props){
+  const dispatch=useDispatch()
+  const navigate=useNavigate()
+  const [events,setEvents]=useState(null)
+  const {vendorEvents}=useSelector((state)=>({...state.event}))
   const {posts}=useSelector((state)=>({...state.post}))
   const [photos,setPhotos]=useState([])
   const getData=async()=>{
@@ -87,10 +93,26 @@ function VendorRight2(props){
     setPhotos(photos.data.feeds)
     
   }
+  const getEvents=async()=>{
+    const vendorId=props.company._id
+    await api.getEventByVendorId(vendorId).then((data)=>{
+      console.log(data.data);
+      setEvents(data.data)
+    }).catch((err)=>{
 
+    })
+  }
   useEffect(()=>{
     getData()
+    
   },[posts])
+  useEffect(()=>{
+    getEvents()
+  },[vendorEvents])
+
+  const handleEventClick=()=>{
+    navigate('/listevent')
+  }
 
   return (
     
@@ -114,8 +136,8 @@ function VendorRight2(props){
   </Box>
   <Box sx={{bgcolor:'#f4a261',p:2,mt:2,borderRadius:2}}>
   <Box sx={{borderRadius:2,p:1}}>
-        <Typography variant='h6'>Events</Typography>
-        <Listcomponent />
+        <Typography variant='h6' sx={{cursor:'pointer'}} onClick={handleEventClick}>Events</Typography>
+        <Listcomponent vendorEvents={events}/>
         </Box>
   </Box>
   <Box sx={{bgcolor:'#f4a261',p:2,mt:2,borderRadius:2}}>
@@ -127,6 +149,7 @@ function VendorRight2(props){
 )
 } 
 function VendorRight() {
+  
   const {loading,userRedux,companyRedux,adminRedux,error} =useSelector((state)=>({...state.auth}))
   return (
     <>

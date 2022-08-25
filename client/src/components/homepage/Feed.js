@@ -30,7 +30,7 @@ const Feed = ({profileview,userId}) => {
     
   },[posts,userId])
   return (
-      <Box flex={4} p={2} marginLeft={'20px'}>
+      <Box flex={3} p={2} marginLeft={'20px'}>
         {userRedux && !profileview && <AddPost/>}
         {feeds.map((fee,index)=> <Post key={index} data={fee}/>)}
         
