@@ -32,8 +32,11 @@ export default function BarChart () {
           <BarSeries
             valueField="population"
             argumentField="year"
+            name="Likes"
+            color="#155799"
+            
           />
-          <Title text="Site Transactions" />
+          <Title text="Most Liked Posts" />
           <Animation />
         </Chart>
       </Paper>

@@ -66,7 +66,7 @@ function Navbar(props) {
   return ( 
     <AppBar position="sticky" 
     
-    style={userRedux?(userRedux.userRoll==="manager")? {backgroundColor:'green'}:{backgroundColor:"navy"}:companyRedux? {backgroundColor:"#F77F00"}:{backgroundColor:navColor}}>
+    style={userRedux?(userRedux.userRoll==="manager")? {backgroundColor:'green'}:{backgroundColor:"#283c86"}:companyRedux? {backgroundColor:"#F77F00"}:{backgroundColor:"#283c86"}}>
       <CssBaseline /> 
       <Toolbar>
         <Typography variant="h5" className={classes.logo} style={{display:"flex"}}>

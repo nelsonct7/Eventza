@@ -10,12 +10,16 @@ function ViewEvent({event}) {
   },[event])
 
   return (
-    <Grid container xs={12}>
-        <Grid item xs={12} sx={{m:2}}>
+    <Grid container xs={12} sx={{display:'flex',justifyContent:'center'}}>
+        <Grid item xs={8} sx={{m:2,
+        border: 'solid #283c86 25px', 
+	      opacity: '0.8',
+        borderRadius:3,
+        }}>
         <Card >
                       <CardMedia
                         component="img"
-                        height="400"
+                        
                         image={"http://localhost:5000/event-images/"+item?.posterImage}
                         alt="Event Image"
                       />
@@ -28,6 +32,9 @@ function ViewEvent({event}) {
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                             {item?.eventType}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                            {item?.description}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                         {moment(item?.eventDate).format("MMM Do YY")}

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {adminLogin,adminUserList,adminVendorList,adminManagerList,adminDeleteUser,adminChangeUserStatus,adminDeleteVendor,adminChangeVendorStatus,adminTockenValidator} = require('../controllers/admincontroller')
 const asynchandler =require('express-async-handler');
-
+ 
 const jwt=require('jsonwebtoken')
 const verifyAdmin=asynchandler((req,res,next)=>{
    

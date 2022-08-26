@@ -21,9 +21,9 @@ export default function BoxSx({title}) {
     >
       <Grid container sx={{display:'flex', flexDirection:'row'}} gap={2}>
        <Typography variant='h6'>{title}</Typography>
-       {title==="Users" && <GroupIcon sx={{width:50,height:50}}/>}
-       {title==="Managers" && <PermContactCalendarIcon sx={{width:50,height:50}}/>}
-       {title==="Companies" && <StoreIcon sx={{width:50,height:50}}/>}
+       {title==="Users" && <><GroupIcon sx={{width:50,height:50}}/> <Typography variant='h6'> : 200</Typography> </>}
+       {title==="Managers" && <><PermContactCalendarIcon sx={{width:50,height:50}}/> <Typography variant='h6'> : 250</Typography></>}
+       {title==="Companies" && <><StoreIcon sx={{width:50,height:50}}/> <Typography variant='h6'> : 300</Typography></>}
        </Grid>
     </Box>
   );

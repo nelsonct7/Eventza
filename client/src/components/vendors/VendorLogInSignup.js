@@ -168,8 +168,10 @@ const VendorLogInSignup = () => {
         flexDirection: 'column',
         alignItems: 'center',
         marginBottom:5,
-        border : 2,
-        paddingBottom:3
+        border: 'solid #283c86 25px', 
+	      opacity: '0.8',
+        borderRadius:3,
+        paddingBottom:3,
       }}>
       {isSignup?<Grid container sx={{marginBottom:5}}>
         <Grid item>

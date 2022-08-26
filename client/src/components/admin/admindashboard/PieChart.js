@@ -8,12 +8,9 @@ import {
 import { Animation } from '@devexpress/dx-react-chart';
 
 const data = [
-  { region: 'Asia', val: 4119626293 },
-  { region: 'Africa', val: 1012956064 },
-  { region: 'Northern America', val: 344124520 },
-  { region: 'Latin America and the Caribbean', val: 590946440 },
-  { region: 'Europe', val: 727082222 },
-  { region: 'Oceania', val: 35104756 },
+  { region: 'Managers', val: 4119626293 },
+  { region: 'Users', val: 1012956064 },
+  { region: 'Companies', val: 344124520 },
 ];
 
 export default function PieChart() {
@@ -29,7 +26,7 @@ export default function PieChart() {
             innerRadius={0.6}
           />
           <Title
-            text="The Population of Continents and Regions"
+            text="Site Users Statistic"
           />
           <Animation />
         </Chart>

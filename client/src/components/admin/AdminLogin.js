@@ -82,9 +82,11 @@ useEffect(()=>{
         flexDirection: 'column',
         alignItems: 'center',
         marginBottom:5,
-        border : 2,
         bgcolor:'darkgray',
-        paddingBottom:5
+        paddingBottom:5,
+        border: 'solid #283c86 25px', 
+	      opacity: '0.8',
+        borderRadius:3
       }}>
            <Grid container>
       <Grid item>
