@@ -5,13 +5,11 @@ import {Grid} from '@mui/material'
 import useStyles from './style';
 
 function Loginas() {
-  const classes = useStyles();
-  useEffect(()=>{
-  })
+
   
   return (
 
-    <Grid container spacing={2} className={classes.maindiv}>
+  <Grid container spacing={2} sx={{display:'flex', justifyContent:'center'}}>
   <Grid item xs={6} md={3}>
     <LoginCard heading={'Admin'} link={'/adminlogin'}/>
   </Grid>

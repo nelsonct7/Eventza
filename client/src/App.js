@@ -38,7 +38,7 @@ useEffect(()=>{
   return (
 <Router>
       <Routes>
-        <Route exact path="/" element={<Home/>} />
+        <Route exact path="/" element={<Home/>}/>
         <Route exact path="/loginas" element={<LoginAsMain/>} />
         <Route exact path="/adminlogin" element={<AdminLogInPage/>} />
         <Route exact path="/adminhome" element={<AdminHome/>} />
